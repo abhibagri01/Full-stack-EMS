@@ -17,7 +17,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     },[pathname])
 
-    const role = "" || "EMPLOYEE" // Replace with actual role from authentication context or state
+    const role = "ADMIN" || "EMPLOYEE" // Replace with actual role from authentication context or state
 
     //create all the navigation items based on the role
     const navItems = [

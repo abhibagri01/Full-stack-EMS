@@ -2,7 +2,7 @@ export const DEPARTMENTS = ["Engineering", "Human Resources", "Marketing", "Sale
 
 export const dummyAdminDashboardData = {
     role: "ADMIN",
-    totalEmployees: 3,
+    totalEmployees: 4,
     totalDepartments: 10,
     todayAttendance: 1,
     pendingLeaves: 1,
@@ -35,13 +35,13 @@ export const dummyEmployeeData = [
         _id: "69b414a7f8a807df391d7b58",
         userId: {
             _id: "69b414a7f8a807df391d7b56",
-            email: "david@example.com",
+            email: "Anurag@example.com",
             role: "EMPLOYEE",
         },
         department: "IT Support",
-        firstName: "David",
-        lastName: "Michael",
-        email: "david@example.com",
+        firstName: "Anurag",
+        lastName: "Panday",
+        email: "Anurag@example.com",
         phone: "9000000001",
         position: "Associate Business Support",
         basicSalary: 1000,
@@ -56,7 +56,7 @@ export const dummyEmployeeData = [
         updatedAt: "2026-03-13T13:44:07.806Z",
         id: "69b414a7f8a807df391d7b58",
         user: {
-            email: "david@example.com",
+            email: "Anurag@example.com",
             role: "EMPLOYEE",
         },
     },
@@ -64,13 +64,13 @@ export const dummyEmployeeData = [
         _id: "69b41439f8a807df391d7b52",
         userId: {
             _id: "69b41439f8a807df391d7b50",
-            email: "alex@example.com",
+            email: "Vishnu@example.com",
             role: "EMPLOYEE",
         },
         department: "Engineering",
-        firstName: "Alex",
-        lastName: "Matthew",
-        email: "alex@example.com",
+        firstName: "Vishnu",
+        lastName: "Bagri",
+        email: "Vishnu@example.com",
         phone: "9000000001",
         position: "Software Developer",
         basicSalary: 2000,
@@ -85,7 +85,7 @@ export const dummyEmployeeData = [
         updatedAt: "2026-03-13T13:42:17.589Z",
         id: "69b41439f8a807df391d7b52",
         user: {
-            email: "alex@example.com",
+            email: "Vishnu@example.com",
             role: "EMPLOYEE",
         },
     },
@@ -118,6 +118,35 @@ export const dummyEmployeeData = [
             role: "EMPLOYEE",
         },
     },
+    {
+    _id: "69b42000f8a807df391d7c01",
+    userId: {
+        _id: "69b42000f8a807df391d7c00",
+        email: "divyansh@example.com",
+        role: "EMPLOYEE",
+    },
+    department: "Marketing",
+    firstName: "Divyansh",
+    lastName: "Khushwaha",
+    email: "divyansh@example.com",
+    phone: "9876543210",
+    position: "Social Media Handler",
+    basicSalary: 30000,
+    allowances: 5000,
+    deductions: 1500,
+    employmentStatus: "ACTIVE",
+    joinDate: "2026-03-20T00:00:00.000Z",
+    image: null,
+    isDeleted: false,
+    bio: "Social Media Handler responsible for managing company social platforms.",
+    createdAt: "2026-03-20T10:00:00.000Z",
+    updatedAt: "2026-03-20T10:00:00.000Z",
+    id: "69b42000f8a807df391d7c01",
+    user: {
+        email: "divyansh@example.com",
+        role: "EMPLOYEE",
+    },
+},
 ];
 
 export const dummyLeaveData = [
@@ -172,6 +201,19 @@ export const dummyLeaveData = [
         updatedAt: "2026-03-13T13:51:45.418Z",
         id: "69b415dff8a807df391d7bdb",
         employee: dummyEmployeeData[0],
+    },
+    {
+    _id: "69b42010f8a807df391d7c10",
+    employeeId: "69b42000f8a807df391d7c01",
+    type: "CASUAL",
+    startDate: "2026-04-05T00:00:00.000Z",
+    endDate: "2026-04-06T00:00:00.000Z",
+    reason: "Family Function",
+    status: "PENDING",
+    createdAt: "2026-03-20T11:00:00.000Z",
+    updatedAt: "2026-03-20T11:00:00.000Z",
+    id: "69b42010f8a807df391d7c10",
+    employee: dummyEmployeeData[3],
     },
 ];
 
@@ -260,6 +302,20 @@ export const dummyPayslipData = [
         id: "69b414e5f8a807df391d7b8c",
         employee: dummyEmployeeData[2],
     },
+    {
+    _id: "69b42020f8a807df391d7c20",
+    employeeId: "69b42000f8a807df391d7c01",
+    month: 2,
+    year: 2026,
+    basicSalary: 30000,
+    allowances: 5000,
+    deductions: 1500,
+    netSalary: 33500,
+    createdAt: "2026-03-20T12:00:00.000Z",
+    updatedAt: "2026-03-20T12:00:00.000Z",
+    id: "69b42020f8a807df391d7c20",
+    employee: dummyEmployeeData[3],
+    },
 ];
 
 export const dummyAttendanceData = [
@@ -286,6 +342,18 @@ export const dummyAttendanceData = [
         dayType: "Full Day",
         createdAt: "2026-03-13T13:48:41.418Z",
         updatedAt: "2026-03-13T13:48:42.433Z",
+    },
+    {
+    _id: "69b42030f8a807df391d7c30",
+    employeeId: "69b42000f8a807df391d7c01",
+    date: "2026-03-20T18:30:00.000Z",
+    checkIn: "2026-03-21T09:00:00.000Z",
+    checkOut: "2026-03-21T17:30:00.000Z",
+    status: "PRESENT",
+    workingHours: 8.5,
+    dayType: "Full Day",
+    createdAt: "2026-03-21T09:00:00.000Z",
+    updatedAt: "2026-03-21T17:30:00.000Z",
     },
 ];
 
