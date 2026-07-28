@@ -17,7 +17,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     },[pathname])
 
-    const role = "ADMIN" || "EMPLOYEE" // Replace with actual role from authentication context or state
+    const role = "" || "EMPLOYEE" // Replace with actual role from authentication context or state
 
     //create all the navigation items based on the role
     const navItems = [
@@ -123,12 +123,12 @@ const Sidebar = () => {
             <div className='lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40'
             onClick={()=>setMobileOpen(false)}/>}
 
-        {/* Slidebar - desktop */}
+        {/* Sidebar - desktop */}
         <aside className='hidden lg:flex flex-col h-full w-65 bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white shrink-0 border-r border-white/4'>
             {sidebarContent}
         </aside>
 
-        {/* Slidebar - mobile */}
+        {/* Sidebar - mobile */}
             <aside className={`lg:hidden fixed inset-y-0 left-0 w-72 bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white z-50 flex flex-col transform transition-transform duration-300 ${
               mobileOpen ? "translate-x-0" : "-translate-x-full"
               }`}>
