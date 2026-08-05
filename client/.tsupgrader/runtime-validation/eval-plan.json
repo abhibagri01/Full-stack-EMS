@@ -1,0 +1,25 @@
+{
+  "projectType": "webapp",
+  "name": "client-runtime-validation",
+  "description": "Basic startup and build validation for the Vite client app",
+  "assertions": [
+    {
+      "type": "command",
+      "name": "build-app",
+      "command": "npm.cmd run build",
+      "expected": "success"
+    }
+  ],
+  "steps": [
+    {
+      "name": "install-dependencies",
+      "type": "command",
+      "command": "npm install"
+    },
+    {
+      "name": "build-app",
+      "type": "command",
+      "command": "npm run build"
+    }
+  ]
+}
