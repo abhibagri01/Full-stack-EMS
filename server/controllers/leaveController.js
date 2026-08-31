@@ -1,3 +1,4 @@
+import { inngest } from "../inngest/index.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 
@@ -37,7 +38,12 @@ export const createLeave = async(req , res) => {
                 status: "PENDING",
             })
 
-            return res,json({ success: true, date: leave});
+            await inngest.send({
+                name:"leave/pending",
+                data: {LeaveApplicationId: leave._id,}
+            })
+
+            return res,json({ success: true, data: leave});
 
 
     } catch (error) {
@@ -75,7 +81,7 @@ export const getLeave = async(req , res) => {
                 employeeId: employee._id
             }).sort({createdAt: -1})
             return res.json({
-                date: leaves,
+                data: leaves,
                 employee: {...employee, id: employee._id.toString()}
             })
          }
