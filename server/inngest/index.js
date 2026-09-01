@@ -3,7 +3,7 @@ import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 import sendEmail from "../config/nodemailer.js";
-import { promises } from "nodemailer/lib/xoauth2/index.js";
+
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "fullstack-ems" });
@@ -93,12 +93,12 @@ const leaveApplicationReminder = inngest.createFunction(
 
 
 //Cron: check attendance at 11:30 AM IST (06:00 UTC) and email absent employees
-const attendanceRemainderCorn = inngest.createFunction(
+const attendanceReminderCorn = inngest.createFunction(
   { id: "attendance-reminder-corn" , triggers: [{ event: "0 0 6 * * *"}]}, //06:00 UTC = 11:30 AM IST
      async ({ step}) => {
         //Step 1: Get today's date range (IST)
         const today = await step.run("get-today-date" , ()=>{
-            const startIST = new Date(new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}) + "T00:00:00 +05:30");
+            const startUTC = new Date(new Date().toLocaleDateString("en-CA", {timeZone: "Asia/Kolkata"}) + "T00:00:00 +05:30");
             const endUTC = new Date(startUTC.getTime() + 24 * 60 * 60 * 1000);
             return {startUTC: startUTC.toLocaleDateString(), endUTC: endUTC.toISOString()} 
         })
@@ -160,10 +160,9 @@ const attendanceRemainderCorn = inngest.createFunction(
                             </div>`
                     })
                 })
+                await Promise.allSettled(emailPromises)
             })
         }
-
-        await promises.allSettled(emailPromises)
 
         return {totalActive: activeEmployees.length, onLeave:onLeaveIds.length, checkedInIds: checkedInIds.length, absent: absentEmployees.length}
 
@@ -181,5 +180,5 @@ const attendanceRemainderCorn = inngest.createFunction(
 export const functions = [
     autoCheckOut,
     leaveApplicationReminder,
-    attendanceRemainderCorn
+    attendanceReminderCorn
 ];
