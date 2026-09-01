@@ -160,7 +160,8 @@ const attendanceReminderCorn = inngest.createFunction(
                             </div>`
                     })
                 })
-                await Promise.allSettled(emailPromises)
+                await Promise.all(emailPromises)
+                return {emailsSent: absentEmployees.length}
             })
         }
 
