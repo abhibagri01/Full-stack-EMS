@@ -1,14 +1,27 @@
 import { Loader2, Save, User } from 'lucide-react';
 import React, { useState } from 'react'
+import api from '../api/axios';
 
 const ProfileForm = ({initialData, onSuccess}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // setLoading(true);
+         setLoading(true);
+         setError("");
+         setMessage("");
+         const formData = new FormData(e.currentTarget);
+         try {
+            await api.post("/profile", formData);
+            setMessage("Profile updated successfully");
+            onSuccess?.();
+         } catch (error) {
+            setError(error?.response?.data?.error || error.message || "Failed to update profile");
+         } finally {
+            setLoading(false);
+         }
     }
 
   return (
@@ -55,8 +68,16 @@ const ProfileForm = ({initialData, onSuccess}) => {
             
             <div>
                 <label className='block text-sm font-medium text-slate-700 mb-2'>Bio</label>
-                <textarea disabled value={initialData.isDeleted} name="bio" defaultValue={initialData.bio || ""}
-                placeholder='Enter your bio' className={`resize-none ${initialData.isDeleted ? 'bg-slate-50 text-slate-400 cursor-not-allowed' : ""}`} />
+                <textarea
+                    disabled={initialData.isDeleted}
+                    name="bio"
+                    defaultValue={initialData.bio || ""}
+                    placeholder="Enter your bio"
+                    className={`resize-none ${
+                        initialData.isDeleted
+                            ? 'bg-slate-50 text-slate-400 cursor-not-allowed'
+                            : ''
+                    }`}/>
                 <p className='text-xs text-slate-400 mt-1.5'>This will be displayed on your public profile</p>
             </div>
             {initialData.isDeleted ?(

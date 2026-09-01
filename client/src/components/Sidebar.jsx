@@ -1,15 +1,22 @@
 import { Link,useLocation } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import { ChevronRightIcon,CalendarIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, MenuIcon, SettingsIcon, UserIcon, XIcon, LogOutIcon } from 'lucide-react'
+import { ChevronRightIcon,CalendarIcon, DollarSignIcon, FileTextIcon, LayoutGridIcon, MenuIcon, SettingsIcon, UserIcon, XIcon, LogOutIcon, Loader2 } from 'lucide-react'
 import { dummyProfileData } from '../assets/assets'
+import { useAuth } from '../context/AuthContext'
+import api from '../api/axios'
 
 const Sidebar = () => {
     const { pathname } = useLocation()
     const [userName, setUserName] = useState('')
     const [mobileOpen, setMobileOpen] = useState(false)
 
+
+    const {user, loading , logout} = useAuth()
+
     useEffect(()=>{
-        setUserName(dummyProfileData.firstName + " " + dummyProfileData.lastName)
+      api.get("/profile").then((res)=> {
+        if(res.data.firstName) setUserName(`${res.data.firstName} ${res.data.lastName || ""}`.trim());
+      })
     },[])
 
     //close mobile sidebar on route change
@@ -17,7 +24,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     },[pathname])
 
-    const role = "" || "EMPLOYEE" // Replace with actual role from authentication context or state
+    const role = user?.role // Replace with actual role from authentication context or state
 
     //create all the navigation items based on the role
     const navItems = [
@@ -31,8 +38,8 @@ const Sidebar = () => {
     ]
 
     const handleLogout = () => {
-        // Implement logout functionality here
-        window.location.href = "/login"; // Redirect to login page after logout  
+      logout(); // Call the logout function from the AuthContext
+      window.location.href = "/login"; // Redirect to login page after logout  
     }
 
     const sidebarContent = (
@@ -82,7 +89,13 @@ const Sidebar = () => {
 
         {/* Navigation Items */}
         <div className='flex-1 px-3 space-y-0.5 overflow-y-auto'>
-            {navItems.map((item) => {
+          {loading ? (
+            <div className='px-3 py-3 flex items-center gap-2 text-slate-500'>
+               <Loader2 className='animate-spin w-4 h-4'/>
+               <span className='text-sm'>Loading...</span>
+            </div>
+          ) : (
+            navItems.map((item) => {
                 const isActive = pathname.startsWith(item.href)
                 return (
                   <Link key={item.name} to={item.href} className={`group flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-medium transition-all duration-150 relative ${
@@ -96,7 +109,9 @@ const Sidebar = () => {
                     {isActive && <ChevronRightIcon className="w-3.5 h-3.5 text-indigo-500/50" />}
                   </Link>
               )
-            })}  
+            }) 
+          )}
+            
         </div>     
 
         {/* Footer Logout */}  

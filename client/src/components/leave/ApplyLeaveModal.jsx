@@ -1,5 +1,7 @@
 import { CalendarDays, FileText, Loader2, Send, X } from 'lucide-react';
 import React, {useState} from 'react'
+import api from '../../api/axios';
+import toast from 'react-hot-toast';
 
 const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
 
@@ -12,7 +14,18 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-       // setLoading(true);
+        setLoading(true);
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        try {
+            await api.post('/leaves', data);
+            onSuccess();
+            onClose();
+        } catch (error) {
+            toast.error(error.response?.data?.error || error.message || "Failed to submit leave request. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     }
 
   if (!open) return null;
@@ -33,12 +46,12 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-            <div className="mb-4">
-                <label htmlFor="leaveType" className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
+            <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
                     <FileText className="w-4 h-4 text-slate-400" />
                     Leave Type
                 </label>
-                <select name="leaveType" required >
+                <select name="type" required >
                     <option value="SICK">Sick Leave</option>
                     <option value="CASUAL">Casual Leave</option>
                     <option value="ANNUAL">Annual Leave</option>
@@ -76,12 +89,12 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
                 <button
                     onClick={onClose}
                     type="button"
-                    className="btn-primary flex-1 flex items-center justify-center gap-2">
+                    className="btn-primary flex-1">
                     Cancel
                 </button>
 
                 <button
-                    onClick={onClose}
+                    
                     disabled={loading}
                     type="submit"
                     className="btn-primary flex-1 flex items-center justify-center gap-2">

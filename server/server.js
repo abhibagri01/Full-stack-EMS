@@ -30,7 +30,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/employees", employeesRouter)
 app.use("/api/profile", profileRouter)
 app.use("/api/attendance", attendanceRouter)
-app.use("/api/leave", leaveRouter)
+app.use("/api/leaves", leaveRouter)
 app.use("/api/payslips", payslipRouter)
 app.use("/api/dashboard", dashboardRouter)
 

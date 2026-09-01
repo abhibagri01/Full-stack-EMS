@@ -5,6 +5,8 @@ import { Loader } from "lucide-react"
 import CheckInButton from "../components/attendance/CheckInButton"
 import AttendanceStats from "../components/attendance/AttendanceStats"
 import AttendanceHistory from "../components/attendance/AttendanceHistory"
+import api from "../api/axios"
+import { toast } from "react-hot-toast"
 
 
 const Attendance = () => {
@@ -14,10 +16,15 @@ const Attendance = () => {
   const [isDeleted, setIsDeleted] = useState(false)
 
   const fetchData = useCallback(async ()=>{
-    setHistory(dummyAttendanceData)
-    setTimeout(() => {
+    try {
+      const res = await api.get("/attendance")
+      const json = res.data;
+      setHistory(json.data || [])
+    } catch (error) {
+      toast.error(error?.response?.data?.error || "Failed to fetch attendance data")
+    } finally {
       setLoading(false)
-    }, 1000);
+    }
   },[])
 
   useEffect(()=>{

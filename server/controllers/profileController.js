@@ -26,7 +26,7 @@ export const getProfile = async (req, res) => {
 
 
 //Update profile
-//PUT /api/profile
+//POST /api/profile
 export const updateProfile = async (req , res) => {
     try {
         const session = req.session;
@@ -35,10 +35,25 @@ export const updateProfile = async (req , res) => {
         if(employee.isDeleted){
             return res.status(403).json({error: "Your account is deactivated. You cannot update your profile."})
         }
-        await Employee.findByIdAndUpdate(employee._id, {
-            bio: req.body.bio
-        })
+       const updatedEmployee = await Employee.findByIdAndUpdate(
+            employee._id,
+            {
+                bio: req.body.bio
+            },
+            { returnDocument: "after" }
+        );
+
+        return res.json({
+            success: true,
+            message: "Profile updated successfully",
+            data: updatedEmployee
+        });
+
     } catch (error) {
-        return res.status(500).json({error: "Failed to update profile"});
+        console.error("Update profile error:", error);
+
+        return res.status(500).json({
+            error: "Failed to update profile"
+        });
     }
-}
+};

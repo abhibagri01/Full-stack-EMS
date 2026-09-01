@@ -3,6 +3,7 @@ import Attendance from "../models/Attendance.js";
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
 import sendEmail from "../config/nodemailer.js";
+import { promises } from "nodemailer/lib/xoauth2/index.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "fullstack-ems" });
@@ -161,6 +162,8 @@ const attendanceRemainderCorn = inngest.createFunction(
                 })
             })
         }
+
+        await promises.allSettled(emailPromises)
 
         return {totalActive: activeEmployees.length, onLeave:onLeaveIds.length, checkedInIds: checkedInIds.length, absent: absentEmployees.length}
 

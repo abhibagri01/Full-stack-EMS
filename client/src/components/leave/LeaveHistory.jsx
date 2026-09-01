@@ -1,6 +1,8 @@
 import { Check, Loader2, X } from "lucide-react";
 import { useState } from "react";
 import {format} from 'date-fns'
+import api from "../../api/axios";
+import toast from "react-hot-toast";
 
 
 
@@ -9,6 +11,14 @@ const LeaveHistory = ({leaves, isAdmin, onUpdate}) => {
 
     const handleStatusUpdate = async (id, status) => {
         setProcessing(id)
+        try {
+            await api.patch(`/leaves/${id}`, {status});
+            onUpdate(id, status)
+        } catch (error) {
+            toast.error(error.response?.data?.error || error.message || "Failed to update leave status. Please try again.");
+        }finally {
+            setProcessing(null)
+        }
     }
   return (
     <div className='card overflow-hidden'>

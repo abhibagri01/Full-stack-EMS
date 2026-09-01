@@ -11,7 +11,7 @@ import User from "../models/User.js";
         const where = {};
         if(department) where.department = department;
 
-        const employees = (await Employee.find(where)).toSorted({createdAt: -1}).populate("userId" ,"email role").lean();
+        const employees = await Employee.find(where).sort({createdAt: -1}).populate("userId" ,"email role").lean();
 
         const result = employees.map((emp)=>({
             ...emp,
@@ -21,7 +21,8 @@ import User from "../models/User.js";
         }))
         return res.json(result)
     } catch (error) {
-        return res.json.status(500).json({error: "Failed to fetch employees"})
+        console.error("Fetch employees error:", error)
+        return res.status(500).json({error: "Failed to fetch employees"})
     }
  }
 
@@ -101,7 +102,8 @@ import User from "../models/User.js";
         if(error.code === 11000){
             return res.status(400).json({error : "Email already exists"})
         }
-        return res.status(500).json({error: "Failed to create employee"});
+        console.error("Update employee error:", error)
+        return res.status(500).json({error: "Failed to update employee"});
     }
  }
 

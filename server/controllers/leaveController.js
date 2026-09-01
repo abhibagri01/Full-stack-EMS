@@ -43,7 +43,7 @@ export const createLeave = async(req , res) => {
                 data: {LeaveApplicationId: leave._id,}
             })
 
-            return res,json({ success: true, data: leave});
+            return res.json({ success: true, data: leave});
 
 
     } catch (error) {
@@ -61,7 +61,10 @@ export const getLeave = async(req , res) => {
         if(isAdmin){
             const status = req.query.status;
             const where = status ? {status} : {};
-            const leaves = (await LeaveApplication.find(where).populate("employeeId")).sort({createdAt: -1});
+            const leaves = await LeaveApplication
+                .find(where)
+                .populate("employeeId")
+                .sort({createdAt: -1});
             const data = leaves.map((l)=>{
                const obj = l.toObject();
                return {
@@ -70,20 +73,22 @@ export const getLeave = async(req , res) => {
                 employee: obj.employeeId,
                 employeeId: obj.employeeId?._id?.toString(),
                }
-            })
+            });
+
             return res.json({data})
          }else{
-            const employee = await Employee.findOne({
-                userId: session.user.userId,
+            const employee = await Employee
+            .findOne({
+                userId: session.userId,
             }).lean();
             if(!employee) return res.status(404).json({error: "Not found"});
             const leaves = await LeaveApplication.find({
                 employeeId: employee._id
-            }).sort({createdAt: -1})
+            }).sort({createdAt: -1});
             return res.json({
                 data: leaves,
                 employee: {...employee, id: employee._id.toString()}
-            })
+            });
          }
     } catch (error) {
         return res.status(500).json({ error: "Failed"});
@@ -99,7 +104,7 @@ export const updateLeave = async(req , res) => {
             return res.status(400).json({error: "Invalid status"});
         }
         const leave = await LeaveApplication.findByIdAndUpdate(req.params.id, {status}, {returnDocument: "after"})
-        return res.json({success: true, date: leave})
+        return res.json({success: true, data: leave})
     } catch (error) {
         return res.status(500).json({ error: "Failed"});
     }

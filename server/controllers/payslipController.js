@@ -19,14 +19,19 @@ export const createPayslip = async (req , res) => {
             month: Number(month),
             year: Number(year),
             basicSalary: Number(basicSalary || 0),
-            allowances: Number(deductions || 0),
+            allowances: Number(allowances || 0),
+            deductions: Number(deductions || 0),
             netSalary,
         })
 
         return res.json({success: true, data: payslip})
 
     } catch (error) {
-        return res.status(500).json({error: "Failed"});
+        console.error("CREATE PAYSLIP ERROR:", error);
+
+        return res.status(500).json({
+            error: error.message
+        });
     }
 
 }
@@ -38,14 +43,14 @@ export const getPayslip = async (req , res) => {
         const session = req.session;
         const isAdmin = session.role === "ADMIN";
         if(isAdmin){
-            const payslips = (await Payslip.find().populate("employeeId")).sort({createdAt: -1});
+            const payslips = await Payslip.find().populate("employeeId").sort({createdAt: -1});
             const data = payslips.map((p)=>{
                 const obj = p.toObject();
                 return {
                     ...obj,
                     id: obj._id.toString(),
                     employee: obj.employeeId,
-                    employeeId: obj.employeeId?._id?.toSting(),
+                    employeeId: obj.employeeId?._id?.toString(),
                 }
             })
             return res.json({data});
@@ -70,7 +75,7 @@ export const getPayslipById = async (req , res) => {
 
        const result = {
         ...payslip,
-        id: payslip._id.toSting(),
+        id: payslip._id.toString(),
         employee: payslip.employeeId,
        }
        return res.json(result)
